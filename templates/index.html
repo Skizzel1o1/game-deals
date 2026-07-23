@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Deals Central</title>
+    <!-- Tailwind CSS & Modern Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-12">
+
+    <!-- Header / Hero Section -->
+    <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🔥</span>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                        Game Deals Central
+                    </h1>
+                    <p class="text-xs text-slate-400">De beste live game-kortingen op één plek</p>
+                </div>
+            </div>
+            <!-- Live Status Badge -->
+            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-semibold flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Live API Updates
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for deal in deals %}
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden hover:border-slate-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/10 flex flex-col">
+                
+                <!-- Game Cover Image -->
+                <div class="relative h-48 bg-slate-800 overflow-hidden">
+                    <img src="{{ deal.thumb }}" alt="{{ deal.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://via.placeholder.com/600x300/1e293b/94a3b8?text=No+Image'">
+                    <span class="absolute top-3 right-3 bg-emerald-500 text-slate-950 font-black text-xs px-2.5 py-1 rounded-lg shadow-lg">
+                        -{{ deal.savings | round(0) | int }}%
+                    </span>
+                    {% if deal.store %}
+                    <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-slate-700">
+                        {{ deal.store }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Deal Info -->
+                <div class="p-5 flex flex-col flex-grow justify-between gap-4">
+                    <div>
+                        <h2 class="font-bold text-lg text-slate-100 line-clamp-1 group-hover:text-blue-400 transition-colors">
+                            {{ deal.title }}
+                        </h2>
+                    </div>
+
+                    <div class="flex items-end justify-between pt-2 border-t border-slate-800/80">
+                        <div>
+                            {% if deal.normal_price %}
+                            <span class="text-xs text-slate-500 line-through block">€{{ deal.normal_price }}</span>
+                            {% endif %}
+                            <span class="text-2xl font-black text-emerald-400">
+                                {% if deal.price == "0.00" or deal.price == 0 %}
+                                    GRATIS
+                                {% else %}
+                                    €{{ deal.price }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        <a href="{{ deal.link }}" target="_blank" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-md shadow-blue-500/20 active:scale-95 text-center">
+                            Bekijk Deal →
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+</body>
+</html>
